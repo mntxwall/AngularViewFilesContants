@@ -1,0 +1,16 @@
+<div>
+  <nz-table nzTemplateMode>
+    <thead>
+    <tr>
+      <th *ngFor="let head of headers">{{ head }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of rows">
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</div>
