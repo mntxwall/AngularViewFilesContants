@@ -25,6 +25,7 @@ export class WelcomeComponent implements OnInit {
     return false;
   };
 
+
   handleUpload():void {
 
     this.reader.readAsText(this.fileList[0] as any, "UTF-8")

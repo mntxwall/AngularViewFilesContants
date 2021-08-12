@@ -14,6 +14,7 @@ import { ShowComponent } from '../show/show.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import {BrowserModule} from "@angular/platform-browser";
 import {CommonModule} from "@angular/common";
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 
 
@@ -31,7 +32,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     NzButtonModule,
     NzIconModule,
     NzIconModule.forRoot(icons),
-    NzTableModule
+    NzTableModule,
+    NzSelectModule
   ],
   declarations: [WelcomeComponent, ShowComponent],
   exports: [WelcomeComponent],

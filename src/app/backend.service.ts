@@ -6,14 +6,14 @@ import {Observable, of} from "rxjs";
 })
 export class BackendService {
 
-  tableData: String = ""
+  tableData: string = ""
   constructor() { }
 
-  setTableData(data: String) {
+  setTableData(data: string) {
     this.tableData = data;
   }
 
-  getTableData():Observable<String> {
+  getTableData():Observable<string> {
     return of(this.tableData);
   }
 }

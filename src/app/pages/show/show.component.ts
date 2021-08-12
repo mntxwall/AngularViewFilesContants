@@ -9,11 +9,16 @@ import {BackendService} from "../../backend.service";
 })
 export class ShowComponent implements OnInit {
 
-  tableData: String = ""
-  headers : String[] = []
+  tableData: string = ""
+  headers : string[] = []
 
   // @ts-ignore
-  rows : String[String[]] = [[]]
+  rows : string[string[]] = [[]]
+
+  selectedValue = null
+
+  //listOfTagOptions:Event
+
 
 
   constructor(private router:Router, private service: BackendService) {
@@ -52,7 +57,7 @@ export class ShowComponent implements OnInit {
 
     lines.forEach(line =>{
 
-      let rowValues: String[] = []
+      let rowValues: string[] = []
 
       line.split(',').forEach(data => rowValues.push(data))
 
