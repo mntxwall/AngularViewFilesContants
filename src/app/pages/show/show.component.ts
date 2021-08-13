@@ -9,15 +9,17 @@ import {BackendService} from "../../backend.service";
 })
 export class ShowComponent implements OnInit {
 
-  tableData: string = ""
-  headers : string[] = []
+  tableData: string = "";
+  headers : string[] = [];
 
   // @ts-ignore
-  rows : string[string[]] = [[]]
+  rows : string[string[]] = [[]];
 
-  selectedValue = null
+  selectedValue = null;
 
   //listOfTagOptions:Event
+
+  listOfSelectedValue:string[] = [];
 
 
 
@@ -26,14 +28,14 @@ export class ShowComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.getUpdateTextViews()
+    this.getUpdateTextViews();
 
     if (this.tableData === ""){
       this.router.navigateByUrl("/")
     }
     else {
-      console.log(this.tableData)
-      this.analyseDataValues()
+      console.log(this.tableData);
+      this.analyseDataValues();
 
       console.log(this.rows)
     }
@@ -44,26 +46,26 @@ export class ShowComponent implements OnInit {
   }
 
   analyseDataValues() {
-    let lines = this.tableData.split(/\r?\n/)
-    let header = lines.shift()
+    let lines = this.tableData.split(/\r?\n/);
+    let header = lines.shift();
 
     // @ts-ignore
-    let tableColumns = header.split(',')
+    let tableColumns = header.split(',');
 
     tableColumns.forEach(column => {
       this.headers.push(column)
-    })
+    });
 
 
     lines.forEach(line =>{
 
-      let rowValues: string[] = []
+      let rowValues: string[] = [];
 
-      line.split(',').forEach(data => rowValues.push(data))
+      line.split(',').forEach(data => rowValues.push(data));
 
       this.rows.push(rowValues)
 
-    })
+    });
 
     this.rows.shift()
 

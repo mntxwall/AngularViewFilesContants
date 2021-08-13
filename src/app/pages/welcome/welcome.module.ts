@@ -15,6 +15,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import {BrowserModule} from "@angular/platform-browser";
 import {CommonModule} from "@angular/common";
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import {FormsModule} from "@angular/forms";
 
 
 
@@ -25,16 +26,17 @@ const antDesignIcons = AllIcons as {
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 
 @NgModule({
-  imports: [
-    CommonModule,
-    WelcomeRoutingModule,
-    NzUploadModule,
-    NzButtonModule,
-    NzIconModule,
-    NzIconModule.forRoot(icons),
-    NzTableModule,
-    NzSelectModule
-  ],
+    imports: [
+        CommonModule,
+        WelcomeRoutingModule,
+        NzUploadModule,
+        NzButtonModule,
+        NzIconModule,
+        NzIconModule.forRoot(icons),
+        NzTableModule,
+        NzSelectModule,
+        FormsModule
+    ],
   declarations: [WelcomeComponent, ShowComponent],
   exports: [WelcomeComponent],
   providers: [{ provide: NZ_ICONS, useValue: icons } ]

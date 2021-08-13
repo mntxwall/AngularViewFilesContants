@@ -1,6 +1,6 @@
 <div>
 
-  <nz-select nzMode="tags" nzPlaceHolder="Tag Mode" nzAllowClear>
+  <nz-select nzMode="tags" nzPlaceHolder="Tag Mode" nzAllowClear [(ngModel)]="listOfSelectedValue">
     <nz-option *ngFor="let head of headers" [nzLabel]="head" [nzValue]="head"></nz-option>
   </nz-select>
 </div>
@@ -14,9 +14,7 @@
     </thead>
     <tbody>
     <tr *ngFor="let row of rows">
-      <td>{{ row[0] }}</td>
-      <td>{{ row[1] }}</td>
-      <td>{{ row[2] }}</td>
+      <td *ngFor="let item of row">{{item}}</td>
     </tr>
     </tbody>
   </nz-table>
