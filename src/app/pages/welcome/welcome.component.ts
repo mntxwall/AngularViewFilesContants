@@ -11,9 +11,11 @@ import {BackendService} from "../../backend.service";
 export class WelcomeComponent implements OnInit {
 
   uploading = false;
-  fileList: NzUploadFile[] = []
+  fileList: NzUploadFile[] = [];
 
-   reader = new FileReader()
+  reader = new FileReader();
+
+   isLoading = false;
 
   constructor(private router : Router, private service: BackendService) { }
 
@@ -27,33 +29,18 @@ export class WelcomeComponent implements OnInit {
 
 
   handleUpload():void {
+    this.isLoading = true;
 
-    this.reader.readAsText(this.fileList[0] as any, "UTF-8")
-
+    //防止页面卡住，无法显示加载按钮
+    setTimeout(() => {
+      this.reader.readAsText(this.fileList[0] as any, "GBK");
+    }, 500);
 
     this.reader.onload = (() => {
       if (this.reader.result) {
-
-        //console.log(this.reader.result);
-
-        //let lines = this.reader.result.toString().split(/\r?\n/)
-
-
-
-        //let headerLine = lines.shift()
-
-//        console.log(headerLine)
-
-
-        this.service.setTableData(this.reader.result.toString())
-
+        this.service.setTableData(this.reader.result.toString());
         // @ts-ignore
         this.router.navigateByUrl("/welcome/show")
-
-        /*
-        lines.forEach(line => {
-          console.log(line)
-        })*/
       }
     });
   }

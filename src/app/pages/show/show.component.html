@@ -1,12 +1,16 @@
 <div>
 
-  <nz-select nzMode="tags" nzPlaceHolder="Tag Mode" nzAllowClear [(ngModel)]="listOfSelectedValue">
+  <nz-select nzMode="tags" nzPlaceHolder="Tag Mode" nzAllowClear
+             [(ngModel)]="listOfSelectedValue">
     <nz-option *ngFor="let head of headers" [nzLabel]="head" [nzValue]="head"></nz-option>
   </nz-select>
+
+  <button nz-button nzType="primary">Go</button>
+
 </div>
 
 <div>
-  <nz-table nzTemplateMode>
+  <nz-table nzTemplateMode [nzScroll]="{ y: '600px' }">
     <thead>
     <tr>
       <th *ngFor="let head of headers">{{ head }}</th>

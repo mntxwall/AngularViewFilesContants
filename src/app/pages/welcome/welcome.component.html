@@ -20,7 +20,7 @@
     (click)="handleUpload()"
     [disabled]="fileList.length === 0"
     style="margin-top: 16px"
-  >
+    [nzLoading]="isLoading">
     {{ uploading ? 'Uploading' : 'Start Upload' }}
   </button>
 
