@@ -1,11 +1,11 @@
 <div>
 
   <nz-select nzMode="tags" nzPlaceHolder="Tag Mode" nzAllowClear
-             [(ngModel)]="listOfSelectedValue">
+             [(ngModel)]="selectedHeaders">
     <nz-option *ngFor="let head of headers" [nzLabel]="head" [nzValue]="head"></nz-option>
   </nz-select>
 
-  <button nz-button nzType="primary">Go</button>
+  <button nz-button nzType="primary" (click)="handleDate()">Go</button>
 
 </div>
 

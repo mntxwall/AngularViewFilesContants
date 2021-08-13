@@ -19,7 +19,7 @@ export class ShowComponent implements OnInit {
 
   //listOfTagOptions:Event
 
-  listOfSelectedValue:string[] = [];
+  selectedHeaders:string[] = [];
 
 
 
@@ -46,6 +46,7 @@ export class ShowComponent implements OnInit {
   }
 
   analyseDataValues() {
+    //把每一行都分出来
     let lines = this.tableData.split(/\r?\n/);
     let header = lines.shift();
 
@@ -68,6 +69,12 @@ export class ShowComponent implements OnInit {
     });
 
     this.rows.shift()
+
+  }
+
+  handleDate() {
+
+    console.log(this.selectedHeaders)
 
   }
 
