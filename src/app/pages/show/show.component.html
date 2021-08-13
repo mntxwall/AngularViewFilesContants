@@ -1,7 +1,23 @@
 <div>
 
+  <!--
   <nz-select nzMode="tags" nzPlaceHolder="Tag Mode" nzAllowClear
              [(ngModel)]="selectedHeaders">
+    <nz-option *ngFor="let head of headers" [nzLabel]="head" [nzValue]="head"></nz-option>
+  </nz-select>
+  -->
+  <nz-form-label [nzSpan]="7">号码</nz-form-label>
+  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择相应的表头" [(ngModel)]="selectedNumbers">
+    <nz-option *ngFor="let head of headers" [nzLabel]="head" [nzValue]="head"></nz-option>
+  </nz-select>
+
+  <nz-form-label [nzSpan]="7">时间</nz-form-label>
+  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择相应的表头" [(ngModel)]="selectedDateTime">
+    <nz-option *ngFor="let head of headers" [nzLabel]="head" [nzValue]="head"></nz-option>
+  </nz-select>
+
+  <nz-form-label [nzSpan]="7">GEOHASH</nz-form-label>
+  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择相应的表头" [(ngModel)]="selectedGEOHASH">
     <nz-option *ngFor="let head of headers" [nzLabel]="head" [nzValue]="head"></nz-option>
   </nz-select>
 
