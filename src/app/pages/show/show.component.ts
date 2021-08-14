@@ -1,14 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {BackendService} from "../../backend.service";
-import {Headerindex, PhoneGeoHash, PhoneGeoHashDateTimeCounts, StayTime, ViewData} from "../../headerindex";
+import {
+  GET_CURRENT, GET_PREVIOS,
+  Headerindex,
+  PhoneGeoHash,
+  PhoneGeoHashDateTimeCounts,
+  StayTime,
+  ViewData
+} from "../../headerindex";
 
 @Component({
   selector: 'app-show',
   templateUrl: './show.component.html',
   styleUrls: ['./show.component.css']
 })
+
 export class ShowComponent implements OnInit {
+
 
   tableData: string = "";
   headers : string[] = [];
@@ -76,7 +85,7 @@ export class ShowComponent implements OnInit {
 
       line.split(',').forEach(data => rowValues.push(data));
 
-      this.rows.push(rowValues);
+      if (rowValues.length > 1) this.rows.push(rowValues);
 
     });
 
@@ -102,7 +111,23 @@ export class ShowComponent implements OnInit {
 
     this.resultPhonesGeoHashDataTime.push(currentPhoneGeoHashDateTime)
 
+  }
 
+  calculateCurrentValue(type: number) {
+
+    let findPhoneGeoHash = this.resultPhonesGeoHashDataTime.find(e => {
+      if (type === GET_CURRENT)
+        return (e.phone === this.currentCalculate.phone && e.geohash === this.currentCalculate.geohash)
+      else
+        return (e.phone === this.preCalculate.phone && e.geohash === this.preCalculate.geohash)
+    });
+    if (findPhoneGeoHash != null){
+
+      findPhoneGeoHash.sumDateTimes +=
+        Math.round(Math.abs((new Date(this.currentCalculate.inDateTime).getTime() - new Date(this.preCalculate.inDateTime).getTime()))/(1000 * 60));
+      let findPhoneGeoHashDateTimeArrays = findPhoneGeoHash.dateTimes[findPhoneGeoHash.dateTimes.length - 1]
+      findPhoneGeoHashDateTimeArrays.end = this.currentCalculate.inDateTime;
+    }
   }
 
   handleDate() {
@@ -114,9 +139,12 @@ export class ShowComponent implements OnInit {
     headerIndex.dateIndex = this.headers.indexOf(this.selectedDateTime);
     headerIndex.geohashIndex = this.headers.indexOf(this.selectedGEOHASH);
 
+
+
     // @ts-ignore
     this.rows.forEach(row=> {
 
+      //console.log(row);
       let tmp: ViewData = {
         phone: row[headerIndex.numberIndex].trim(),
         inDateTime: row[headerIndex.dateIndex].trim(),
@@ -128,13 +156,6 @@ export class ShowComponent implements OnInit {
       this.currentCalculate.phone = row[headerIndex.numberIndex].trim();
       this.currentCalculate.geohash = row[headerIndex.geohashIndex].trim();
       this.currentCalculate.inDateTime = row[headerIndex.dateIndex].trim();
-
-
-      ///console.log("current")
-      //console.log(this.currentCalculate)
-
-      //console.log("pre")
-      //console.log(this.preCalculate)
 
       //first init
       if(this.preCalculate.phone === "" && this.preCalculate.geohash === ""){
@@ -150,63 +171,31 @@ export class ShowComponent implements OnInit {
       if (this.currentCalculate.phone === this.preCalculate.phone &&
         this.currentCalculate.geohash === this.preCalculate.geohash ){
         //find the array index and caculate the date
+        this.calculateCurrentValue(GET_CURRENT)
 
-
-        let findPhoneGeoHash = this.resultPhonesGeoHashDataTime.find(e => {
-          return (e.phone === this.currentCalculate.phone && e.geohash === this.currentCalculate.geohash)
-        });
-
-
-
-        // @ts-ignore
-        findPhoneGeoHash.sumDateTimes +=
-          Math.abs((new Date(this.currentCalculate.inDateTime).getTime() - new Date(this.preCalculate.inDateTime).getTime()))/(1000 * 60);
-
-        // @ts-ignore
-        //let findPhoneGeoHashDateTimeArrays = findPhoneGeoHash.dateTimes.find(e => e.start === this.currentCalculate.inDateTime);
-
-        // @ts-ignore
-        let findPhoneGeoHashDateTimeArrays = findPhoneGeoHash.dateTimes[findPhoneGeoHash.dateTimes.length - 1]
-
-        // @ts-ignore
-        findPhoneGeoHashDateTimeArrays.end = this.currentCalculate.inDateTime;
       }
       else if (this.currentCalculate.geohash !== this.preCalculate.geohash){
 
+        /*
+        * 如果geohash发生了变化 ，那么在结果集中找cur的值，如果没有找到就是新的一条记录，需要init，
+        * 找到的话则是新的一段时间的开始，需要把时间参与上一条的计算
+        * */
         let findPhoneGeoHash = this.resultPhonesGeoHashDataTime.find(e => {
           return (e.phone === this.currentCalculate.phone && e.geohash === this.currentCalculate.geohash)
         });
-
         if (findPhoneGeoHash == null) {
           this.initNewPhoneGeoHashValue();
         }
         else {
-
           let currentDateTime: StayTime = {
             start: this.currentCalculate.inDateTime,
             end: ""
           }
-
-          //如果发生了切换，把切换的时间当成号码在上一个geohash中的时间
-          let findPrePhoneGeoHash = this.resultPhonesGeoHashDataTime.find(e => {
-            return (e.phone === this.preCalculate.phone && e.geohash === this.preCalculate.geohash)
-          });
-
-          if (findPrePhoneGeoHash != null) {
-
-            findPrePhoneGeoHash.sumDateTimes +=
-              Math.abs((new Date(this.currentCalculate.inDateTime).getTime() - new Date(this.preCalculate.inDateTime).getTime()))/(1000 * 60);
-
-            // @ts-ignore
-            let findPrePhoneGeoHashDateTimeArrays = findPrePhoneGeoHash.dateTimes[findPrePhoneGeoHash.dateTimes.length - 1]
-
-            // @ts-ignore
-            findPrePhoneGeoHashDateTimeArrays.end = this.currentCalculate.inDateTime;
-
-          }
-
           findPhoneGeoHash.dateTimes.push(currentDateTime)
 
+          //如果发生了切换，把切换的时间当成号码在上一个geohash中的时间
+
+          this.calculateCurrentValue(GET_PREVIOS)
 
         }
       }
@@ -216,12 +205,6 @@ export class ShowComponent implements OnInit {
       this.preCalculate.phone = this.currentCalculate.phone;
       this.preCalculate.geohash = this.currentCalculate.geohash;
 
-      //this.preCalculate = this.currentCalculate;
-
-
-
-
-
       this.viewDates.push(tmp);
 
     });
@@ -230,7 +213,7 @@ export class ShowComponent implements OnInit {
 
     //
 
-    console.log(this.viewDates);
+    //console.log(this.viewDates);
 
     console.log(this.resultPhonesGeoHashDataTime)
 

@@ -27,3 +27,6 @@ export interface PhoneGeoHashDateTimeCounts {
   dateTimes: StayTime[];
   sumDateTimes: number;
 }
+
+export const  GET_CURRENT: number = 1;
+export const  GET_PREVIOS: number = 2;
