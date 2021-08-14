@@ -10,3 +10,20 @@ export interface ViewData {
   geohash: string;
 }
 
+export interface StayTime {
+  start: string;
+  end: string;
+}
+
+export interface PhoneGeoHash {
+  phone: string;
+  geohash: string;
+  inDateTime: string;
+}
+
+export interface PhoneGeoHashDateTimeCounts {
+  phone: string;
+  geohash: string;
+  dateTimes: StayTime[];
+  sumDateTimes: number;
+}
