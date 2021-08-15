@@ -116,7 +116,8 @@ export class ShowComponent implements OnInit {
 
     let currentDateTime: StayTime = {
       start: this.currentCalculate.inDateTime,
-      end: ""
+      end: "",
+      interval: 0
     }
 
     currentPhoneGeoHashDateTime.dateTimes.push(currentDateTime);
@@ -133,11 +134,13 @@ export class ShowComponent implements OnInit {
         return (e.phone === this.preCalculate.phone && e.geohash === this.preCalculate.geohash)
     });
     if (findPhoneGeoHash != null){
-
       findPhoneGeoHash.sumDateTimes +=
         Math.round(Math.abs((new Date(this.currentCalculate.inDateTime).getTime() - new Date(this.preCalculate.inDateTime).getTime()))/(1000 * 60));
       let findPhoneGeoHashDateTimeArrays = findPhoneGeoHash.dateTimes[findPhoneGeoHash.dateTimes.length - 1]
       findPhoneGeoHashDateTimeArrays.end = this.currentCalculate.inDateTime;
+      findPhoneGeoHashDateTimeArrays.interval =
+        Math.round(Math.abs((new Date(findPhoneGeoHashDateTimeArrays.start).getTime() - new Date(findPhoneGeoHashDateTimeArrays.end).getTime()))/(1000 * 60));
+      //findPhoneGeoHash.sumDateTimes += findPhoneGeoHashDateTimeArrays.interval;
     }
   }
 
@@ -202,7 +205,8 @@ export class ShowComponent implements OnInit {
         else {
           let currentDateTime: StayTime = {
             start: this.currentCalculate.inDateTime,
-            end: ""
+            end: "",
+            interval: 0
           }
           findPhoneGeoHash.dateTimes.push(currentDateTime)
 

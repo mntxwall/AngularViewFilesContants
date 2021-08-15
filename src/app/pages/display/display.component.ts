@@ -18,11 +18,22 @@ export class DisplayComponent implements OnInit {
   constructor(private router:Router, private service: BackendService) { }
 
   ngOnInit(): void {
-   this.service.getResultPhoneGeoHashDataTime().subscribe(data => this.displayPhonesGeoHashDataTime = data);
+   this.service.getResultPhoneGeoHashDataTime().subscribe(data => {
+     this.displayPhonesGeoHashDataTime = data;
+
+     //时间段进行排序
+     this.displayPhonesGeoHashDataTime.forEach(t =>{
+       t.dateTimes.sort((a, b) => (a.interval > b.interval) ? -1 : 1)
+     })
+   });
+
 
    if (this.displayPhonesGeoHashDataTime.length <= 1){
+
+     // @ts-ignore
      this.router.navigateByUrl("/");
    }
+
     //console.log(this.service.getResultPhoneGeoHashDataTime())
   }
 

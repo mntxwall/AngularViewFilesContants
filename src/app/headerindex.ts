@@ -13,6 +13,7 @@ export interface ViewData {
 export interface StayTime {
   start: string;
   end: string;
+  interval: number;
 }
 
 export interface PhoneGeoHash {
