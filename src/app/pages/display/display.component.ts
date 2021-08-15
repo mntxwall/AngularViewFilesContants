@@ -13,7 +13,7 @@ export class DisplayComponent implements OnInit {
   displayPhonesGeoHashDataTime: PhoneGeoHashDateTimeCounts[] = [];
   expandSet = new Set<string>();
 
-  expandGeoHashDateTimes: StayTime[] | undefined = [];
+  //expandGeoHashDateTimes: StayTime[] | undefined = [];
 
   constructor(private router:Router, private service: BackendService) { }
 
@@ -29,11 +29,11 @@ export class DisplayComponent implements OnInit {
   onExpandChange(geohash: string, checked: boolean): void {
     if (checked) {
       this.expandSet.add(geohash);
-      this.expandGeoHashDateTimes = this.displayPhonesGeoHashDataTime.find(e => e.geohash === geohash)?.dateTimes;
+      //this.expandGeoHashDateTimes = this.displayPhonesGeoHashDataTime.find(e => e.geohash === geohash)?.dateTimes;
 
     } else {
       this.expandSet.delete(geohash);
-      this.expandGeoHashDateTimes = [];
+      //this.expandGeoHashDateTimes = [];
     }
   }
 
