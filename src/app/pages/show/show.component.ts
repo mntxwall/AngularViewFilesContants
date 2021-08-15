@@ -228,7 +228,9 @@ export class ShowComponent implements OnInit {
 
     //console.log(this.viewDates);
 
-    console.log(this.resultPhonesGeoHashDataTime)
+    console.log(this.resultPhonesGeoHashDataTime);
+
+    this.service.setResultPhoneGeoHashDataTime(this.resultPhonesGeoHashDataTime);
 
     this.router.navigateByUrl("/welcome/result")
 
