@@ -19,9 +19,14 @@ import {
 export class ShowComponent implements OnInit {
 
 
+  //用于显示导入文本的数据
   tableData: string = "";
+
+  //用于存储导入的文本数据中分析出来的表头
   headers : string[] = [];
 
+  //rows表示根据换行符解析出来的每行.
+  // 每行中又要string数组，根据逗号解析出来的每个字段
   // @ts-ignore
   rows : string[string[]] = [[]];
 
@@ -31,18 +36,26 @@ export class ShowComponent implements OnInit {
 
   //listOfTagOptions:Event
 
+  //三个selectd，用于表示用户选择这三个表头使用的字段
   selectedNumbers: string = "";
   selectedDateTime: string = "";
-
   selectedGEOHASH: string = "";
 
+  //用于保存最后的结果
+  //该interface有phone,geohash,还有在这个geohash所在时间的切片数组
+  resultPhonesGeoHashDataTime: PhoneGeoHashDateTimeCounts[] = []
 
-
+  //preCalculate和currentCalculate用于表示在计算统计时当前的值和上一个处理的值。
+  // currentCalculate.geohash和preCalculate.geohash一样时，表示在同一个geohash中
+  // 在计算时直接找到resultPhonesGeoHashDataTime对应的值，在该值在进行时间的累积。
+  // 如果currentCalculate.geohash和preCalculate.geohash不一样时，则说明发生了切换，
+  // 要在结果数组中找到该切换的geohash之前有没有处理过，如果有处理过，则生成新的时间切片，
+  // 如果没有处理过，则生成新的结果项，加入到最终的resultPhonesGeoHashDataTime数组中。
   preCalculate: PhoneGeoHash = {phone:"", geohash:"", inDateTime: ""};
   currentCalculate: PhoneGeoHash = { phone: "", geohash: "", inDateTime: ""}
 
 
-  resultPhonesGeoHashDataTime: PhoneGeoHashDateTimeCounts[] = []
+
 
   constructor(private router:Router, private service: BackendService) {
   }
@@ -71,6 +84,7 @@ export class ShowComponent implements OnInit {
     let lines = this.tableData.split(/\r?\n/);
     let header = lines.shift();
 
+    //再分出每一行的每个字段
     // @ts-ignore
     let tableColumns = header.split(',');
 
@@ -82,9 +96,7 @@ export class ShowComponent implements OnInit {
     lines.forEach(line =>{
 
       let rowValues: string[] = [];
-
       line.split(',').forEach(data => rowValues.push(data));
-
       if (rowValues.length > 1) this.rows.push(rowValues);
 
     });
@@ -108,7 +120,6 @@ export class ShowComponent implements OnInit {
     }
 
     currentPhoneGeoHashDateTime.dateTimes.push(currentDateTime);
-
     this.resultPhonesGeoHashDataTime.push(currentPhoneGeoHashDateTime)
 
   }
@@ -144,12 +155,14 @@ export class ShowComponent implements OnInit {
     // @ts-ignore
     this.rows.forEach(row=> {
 
+      /*
       //console.log(row);
       let tmp: ViewData = {
         phone: row[headerIndex.numberIndex].trim(),
         inDateTime: row[headerIndex.dateIndex].trim(),
         geohash: row[headerIndex.geohashIndex].trim()
       }
+       */
 
 
       //当前值
@@ -205,17 +218,19 @@ export class ShowComponent implements OnInit {
       this.preCalculate.phone = this.currentCalculate.phone;
       this.preCalculate.geohash = this.currentCalculate.geohash;
 
-      this.viewDates.push(tmp);
+      //this.viewDates.push(tmp);
 
     });
 
-    this.service.setViewData(this.viewDates);
+    //this.service.setViewData(this.viewDates);
 
     //
 
     //console.log(this.viewDates);
 
     console.log(this.resultPhonesGeoHashDataTime)
+
+    this.router.navigateByUrl("/welcome/result")
 
   }
 
