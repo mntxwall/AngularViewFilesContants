@@ -1,0 +1,27 @@
+<nz-table #basicTable [nzData]="displayPhonesGeoHashDataTime">
+  <thead>
+  <tr>
+    <th nzWidth="60px"></th>
+    <th>号码</th>
+    <th>GEOHASH</th>
+    <th>时长（分钟）</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngFor="let viewData of displayPhonesGeoHashDataTime">
+    <tr>
+      <td [nzExpand]="expandSet.has(viewData.geohash)" (nzExpandChange)="onExpandChange(viewData.geohash, $event)"></td>
+      <td>{{ viewData.phone }}</td>
+      <td>{{ viewData.geohash }}</td>
+      <td>{{ viewData.sumDateTimes }}</td>
+    </tr>
+    <tr [nzExpand]="expandSet.has(viewData.geohash)">
+      <nz-list nzItemLayout="horizontal">
+        <nz-list-item *ngFor="let item of expandGeoHashDateTimes">
+          {{ item.end }} - {{ item.start }}
+        </nz-list-item>
+      </nz-list>
+    </tr>
+  </ng-container>
+  </tbody>
+</nz-table>

@@ -37,9 +37,9 @@ export class ShowComponent implements OnInit {
   //listOfTagOptions:Event
 
   //三个selectd，用于表示用户选择这三个表头使用的字段
-  selectedNumbers: string = "";
-  selectedDateTime: string = "";
-  selectedGEOHASH: string = "";
+  selectedNumbers: string = "己方号码";
+  selectedDateTime: string = "截获时间*";
+  selectedGEOHASH: string = "己方7位GEOHASH";
 
   //用于保存最后的结果
   //该interface有phone,geohash,还有在这个geohash所在时间的切片数组
