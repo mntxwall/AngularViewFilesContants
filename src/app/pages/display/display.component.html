@@ -1,41 +1,41 @@
 <nz-table nzTemplateMode>
   <thead>
-  <tr>
-    <th nzWidth="60px"></th>
-    <th>号码</th>
-    <th>GEOHASH</th>
-    <th>时长（分钟）</th>
-  </tr>
+    <tr>
+      <th nzWidth="60px"></th>
+      <th>号码</th>
+      <th>GEOHASH</th>
+      <th>时长（分钟）</th>
+    </tr>
   </thead>
   <tbody>
-  <ng-container *ngFor="let viewData of displayPhonesGeoHashDataTime">
-    <tr>
-      <td [nzExpand]="expandSet.has(viewData.geohash)" (nzExpandChange)="onExpandChange(viewData.geohash, $event)"></td>
-      <td>{{ viewData.phone }}</td>
-      <td>{{ viewData.geohash }}</td>
-      <td>{{ viewData.sumDateTimes }}</td>
-    </tr>
-    <tr [nzExpand]="expandSet.has(viewData.geohash)">
-      <nz-table #innerTable [nzData]="viewData.dateTimes" nzSize="middle" [nzShowPagination]="false">
-  <thead>
-  <tr>
-    <th>开始时间</th>
-    <th>结束时间</th>
-    <th>停留时间（分钟）</th>
-  </tr>
-  </thead>
+    <ng-container *ngFor="let viewData of displayPhonesGeoHashDataTime">
+      <tr>
+        <td [nzExpand]="expandSet.has(viewData.geohash)" (nzExpandChange)="onExpandChange(viewData.geohash, $event)">
+        </td>
+        <td>{{ viewData.phone }}</td>
+        <td>{{ viewData.geohash }}</td>
+        <td>{{ viewData.sumDateTimes }}</td>
+      </tr>
+      <tr [nzExpand]="expandSet.has(viewData.geohash)">
+        <nz-table #innerTable [nzData]="viewData.dateTimes" nzSize="middle" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th>开始时间</th>
+              <th>结束时间</th>
+              <th>停留时间（分钟）</th>
+            </tr>
+          </thead>
   <tbody>
-
-  <ng-container *ngFor="let item of viewData.dateTimes">
-    <tr>
-      <td>{{ item.end }}</td>
-      <td>{{ item.start }}</td>
-      <td>{{ item.interval }}</td>
-    </tr>
-  </ng-container>
+    <ng-container *ngFor="let item of viewData.dateTimes">
+      <tr>
+        <td>{{ item.end }}</td>
+        <td>{{ item.start }}</td>
+        <td>{{ item.interval }}</td>
+      </tr>
+    </ng-container>
   </tbody>
 </nz-table>
-    </tr>
-  </ng-container>
-  </tbody>
+</tr>
+</ng-container>
+</tbody>
 </nz-table>

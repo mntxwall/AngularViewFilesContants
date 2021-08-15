@@ -19,7 +19,7 @@ export class DisplayComponent implements OnInit {
 
   ngOnInit(): void {
    this.service.getResultPhoneGeoHashDataTime().subscribe(data => {
-     this.displayPhonesGeoHashDataTime = data;
+     this.displayPhonesGeoHashDataTime = data;     
 
      //时间段进行排序
      this.displayPhonesGeoHashDataTime.forEach(t =>{
