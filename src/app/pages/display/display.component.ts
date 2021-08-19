@@ -51,4 +51,9 @@ export class DisplayComponent implements OnInit {
     }
   }
 
+  exportData(): void {
+
+
+  }
+
 }

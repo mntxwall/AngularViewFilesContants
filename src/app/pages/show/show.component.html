@@ -21,7 +21,10 @@
     <nz-option *ngFor="let head of headers" [nzLabel]="head" [nzValue]="head"></nz-option>
   </nz-select>
 
-  <button nz-button nzType="primary" (click)="handleDate()">Go</button>
+  <button nz-button nzType="primary"
+          (click)="handleDate()" [nzLoading]="isCalculate">
+    {{ isCalculate ? '处理中' : 'Go' }}
+  </button>
 
 </div>
 
