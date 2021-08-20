@@ -53,6 +53,29 @@ export class DisplayComponent implements OnInit {
 
   exportData(): void {
 
+    console.log(this.displayPhonesGeoHashDataTime);
+
+    let str="你,我,他\r\nD,E,F";
+    let exportCsvString = "号码,GEOHASH,停留总时长,开始时间,结束时间,停留区间时长\r\n";
+
+    this.displayPhonesGeoHashDataTime.forEach(row => {
+      row.dateTimes.forEach(dates =>{
+        exportCsvString += row.phone + "," + row.geohash + "," + row.sumDateTimes + "," +
+          dates.end.toString() + "," + dates.start + "," + dates.interval + "\r\n";
+      });
+    });
+
+    const blob = new Blob([ "\uFEFF" + exportCsvString], { type: 'text/csv;charset=GBK;' });
+
+    const a = document.createElement('a');
+
+    const url = window.URL.createObjectURL(blob);
+
+    a.href = url;
+    a.download = Date.now().toString() + '.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
 
   }
 
