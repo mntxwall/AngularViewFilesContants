@@ -123,7 +123,9 @@ export class ShowComponent implements OnInit {
       phone: this.currentCalculate.phone,
       geohash: this.currentCalculate.geohash,
       dateTimes: [],
-      sumDateTimes: 0
+      sumDateTimes: 0,
+      geoHashName: "",
+      geoHashNameCount: 0
     }
 
     let currentDateTime: StayTime = {
@@ -275,12 +277,30 @@ export class ShowComponent implements OnInit {
 
       });
 
-      console.log(this.resultPhonesGeoHashDataTime);
+
+
+      this.resultPhonesGeoHashDataTime.forEach(e => {
+
+        //if()
+
+        let tmp = this.resultPhoneGeoHashNameCount.filter(f =>{
+          return (f.geohash === e.geohash && f.phone === e.phone)
+        });
+
+        tmp.sort((g1, g2) =>{
+          return g1.baseNameCount < g2.baseNameCount ? 1: -1
+        });
+        e.geoHashName = tmp[0].baseName;
+        e.geoHashNameCount = tmp[0].baseNameCount;
+        //console.log(tmp[0])
+
+      })
 
       this.service.setResultPhoneGeoHashDataTime(this.resultPhonesGeoHashDataTime);
 
       console.log(this.resultPhoneGeoHashNameCount);
-      
+
+      console.log(this.resultPhonesGeoHashDataTime);
 
       this.router.navigateByUrl("/welcome/result");
 

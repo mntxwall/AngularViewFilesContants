@@ -66,13 +66,13 @@ export class DisplayComponent implements OnInit {
 
     //let exportCsvString = "号码,GEOHASH,停留总时长,开始时间,结束时间,停留区间时长\r\n";
 
-    this.exportCsvString = "号码,GEOHASH,停留总时长,开始时间,结束时间,停留区间时长\r\n";
+    this.exportCsvString = "号码,GEOHASH,停留总时长,开始时间,结束时间,停留区间时长,GEOHASH中最多次数基站名\r\n";
 
     this.displayPhonesGeoHashDataTime.forEach(row => {
 
       row.dateTimes.forEach(dates =>{
         this.exportCsvString += row.phone + "," + row.geohash + "," + row.sumDateTimes + "," +
-          dates.end.toString() + "," + dates.start + "," + dates.interval + "\r\n";
+          dates.end.toString() + "," + dates.start + "," + dates.interval + "," + row.geoHashName +"\r\n";
       });
     });
 
@@ -101,11 +101,13 @@ export class DisplayComponent implements OnInit {
     this.isExporting = true;
     this.downLoadFileName = Date.now().toString();
 
+    this.exportCsv();
+
     // @ts-ignore
     this.modal.confirm({
       nzTitle: '<i>下载进行中</i>',
       nzContent: `<b>本次下载文件的名字为：${this.downLoadFileName}.zip</b>`,
-      nzOnOk: this.exportCsv
+
     });
 
 

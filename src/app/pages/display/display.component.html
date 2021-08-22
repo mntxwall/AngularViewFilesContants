@@ -12,6 +12,7 @@
       <th>号码</th>
       <th>GEOHASH</th>
       <th>时长（分钟）</th>
+      <th>GEOHASH中最多次数基站名</th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +23,7 @@
         <td>{{ viewData.phone }}</td>
         <td>{{ viewData.geohash }}</td>
         <td>{{ viewData.sumDateTimes }}</td>
+        <td>{{ viewData.geoHashName }}</td>
       </tr>
       <tr [nzExpand]="expandSet.has(viewData.geohash)">
         <nz-table #innerTable [nzData]="viewData.dateTimes" nzSize="middle" [nzShowPagination]="false">

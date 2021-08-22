@@ -28,6 +28,8 @@ export interface PhoneGeoHashDateTimeCounts {
   geohash: string;
   dateTimes: StayTime[];
   sumDateTimes: number;
+  geoHashName: string;
+  geoHashNameCount: number;
 }
 
 export interface PhoneGeoHashName {
