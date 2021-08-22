@@ -5,7 +5,7 @@ import {
   GET_CURRENT, GET_PREVIOS,
   Headerindex,
   PhoneGeoHash,
-  PhoneGeoHashDateTimeCounts,
+  PhoneGeoHashDateTimeCounts, PhoneGeoHashNameCount,
   StayTime,
   ViewData
 } from "../../headerindex";
@@ -31,9 +31,9 @@ export class ShowComponent implements OnInit {
   // @ts-ignore
   rows : string[string[]] = [[]];
 
-  viewDates: ViewData[] = [];
+//  viewDates: ViewData[] = [];
 
-  selectedValue = null;
+//  selectedValue = null;
 
   //listOfTagOptions:Event
 
@@ -41,10 +41,13 @@ export class ShowComponent implements OnInit {
   selectedNumbers: string = "己方号码";
   selectedDateTime: string = "截获时间*";
   selectedGEOHASH: string = "己方7位GEOHASH";
+  selectedBashName: string = "基站名称";
 
   //用于保存最后的结果
   //该interface有phone,geohash,还有在这个geohash所在时间的切片数组
   resultPhonesGeoHashDataTime: PhoneGeoHashDateTimeCounts[] = [];
+
+  resultPhoneGeoHashNameCount: PhoneGeoHashNameCount[] = [];
 
   //preCalculate和currentCalculate用于表示在计算统计时当前的值和上一个处理的值。
   // currentCalculate.geohash和preCalculate.geohash一样时，表示在同一个geohash中
@@ -96,8 +99,16 @@ export class ShowComponent implements OnInit {
 
     lines.forEach(line =>{
 
+      //去掉双引号
       let rowValues: string[] = [];
-      line.split(',').forEach(data => rowValues.push(data));
+      line.split(',').forEach(data => {
+
+        let tmp = data;
+        tmp = tmp.substr(0, 1) === "\"" ? tmp.substring(1, tmp.length - 1).trim() : tmp.trim();
+        tmp = tmp.substr(-1, 1) === "\"" ? tmp.substring(0, tmp.length - 1).trim() : tmp.trim();
+        rowValues.push(tmp);
+
+      });
       if (rowValues.length > 1) this.rows.push(rowValues);
 
     });
@@ -145,11 +156,21 @@ export class ShowComponent implements OnInit {
     }
   }
 
+  doGeoHashNameCalculation() {
+
+  }
+
+
   doTheTimeCalculating(headerIndex: Headerindex, row: string[]) {
 
-    this.currentCalculate.phone = row[headerIndex.numberIndex].trim();
-    this.currentCalculate.geohash = row[headerIndex.geohashIndex].trim();
-    this.currentCalculate.inDateTime = row[headerIndex.dateIndex].trim();
+  //  this.currentCalculate.phone = row[headerIndex.numberIndex].trim();
+  //  this.currentCalculate.geohash = row[headerIndex.geohashIndex].trim();
+  //  this.currentCalculate.inDateTime = row[headerIndex.dateIndex].trim();
+
+    //去掉双引号
+    //this.currentCalculate.phone =
+
+   //console.log(this.currentCalculate.geohash);
 
     //first init
     if(this.preCalculate.phone === "" && this.preCalculate.geohash === ""){
@@ -202,6 +223,19 @@ export class ShowComponent implements OnInit {
 
   }
 
+  initNewPhoneGeoHashName(baseName: string) {
+
+    let currentPhoneGeoHashNameCount = {
+      phone: this.currentCalculate.phone,
+      geohash: this.currentCalculate.geohash,
+      baseName: baseName,
+      baseNameCount: 0
+    }
+
+    this.resultPhoneGeoHashNameCount.push(currentPhoneGeoHashNameCount);
+
+
+  }
   handleDate() {
 
     this.isCalculate = true;
@@ -213,14 +247,35 @@ export class ShowComponent implements OnInit {
     headerIndex.dateIndex = this.headers.indexOf(this.selectedDateTime);
     headerIndex.geohashIndex = this.headers.indexOf(this.selectedGEOHASH);
 
+
+    //添加一栏基站名称
+    headerIndex.baseName = this.headers.indexOf(this.selectedBashName);
+
     setTimeout(() => {
       // @ts-ignore
+      //用一个循环解决问题
       this.rows.forEach(row=> {
         this.doTheTimeCalculating(headerIndex, row);
+
+        //找到相应的数据结构，没有的话就新建一个加入到队例里，或者是map里
+        let findPhoneGeoHashName = this.resultPhoneGeoHashNameCount.find(e => {
+          return (e.geohash === row[headerIndex.geohashIndex].trim() && e.phone == row[headerIndex.numberIndex].trim()
+            && e.baseName === row[headerIndex.baseName].trim())
+        });
+
+        if (findPhoneGeoHashName == null) {
+          this.initNewPhoneGeoHashName(row[headerIndex.baseName].trim());
+        }
+        else {
+          findPhoneGeoHashName.baseNameCount += 1;
+        }
       });
+
       console.log(this.resultPhonesGeoHashDataTime);
 
       this.service.setResultPhoneGeoHashDataTime(this.resultPhonesGeoHashDataTime);
+
+      console.log(this.resultPhoneGeoHashNameCount);
 
       this.router.navigateByUrl("/welcome/result");
 

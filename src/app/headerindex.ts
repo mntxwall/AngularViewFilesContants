@@ -2,6 +2,7 @@ export interface Headerindex {
   numberIndex: number;
   dateIndex: number;
   geohashIndex: number;
+  baseName: number;
 }
 
 export interface ViewData {
@@ -27,6 +28,19 @@ export interface PhoneGeoHashDateTimeCounts {
   geohash: string;
   dateTimes: StayTime[];
   sumDateTimes: number;
+}
+
+export interface PhoneGeoHashName {
+  phone: string;
+  geohash: string;
+  baseName: number;
+}
+
+export interface PhoneGeoHashNameCount{
+  phone: string;
+  geohash: string;
+  baseName: string;
+  baseNameCount: number;
 }
 
 //export interface GeoHashGetNew
