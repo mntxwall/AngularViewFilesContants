@@ -19,6 +19,8 @@ import {FormsModule} from "@angular/forms";
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { DisplayComponent } from '../display/display.component';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+
 
 
 
@@ -40,7 +42,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     NzSelectModule,
     FormsModule,
     NzFormModule,
-    NzListModule
+    NzListModule,
+    NzModalModule
   ],
   declarations: [WelcomeComponent, ShowComponent, DisplayComponent],
   exports: [WelcomeComponent],

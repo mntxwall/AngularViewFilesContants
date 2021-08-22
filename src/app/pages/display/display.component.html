@@ -1,6 +1,8 @@
 <button nz-button nzType="primary"
-        (click)="exportData()">
-  导出
+        (click)="exportData()"
+        [nzLoading]="isExporting"
+>
+  {{ isExporting ? '导出中' : '导出' }}
 </button>
 
 <nz-table nzTemplateMode>

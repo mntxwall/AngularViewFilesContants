@@ -29,5 +29,7 @@ export interface PhoneGeoHashDateTimeCounts {
   sumDateTimes: number;
 }
 
+//export interface GeoHashGetNew
+
 export const  GET_CURRENT: number = 1;
 export const  GET_PREVIOS: number = 2;
