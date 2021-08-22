@@ -156,16 +156,29 @@ export class ShowComponent implements OnInit {
     }
   }
 
-  doGeoHashNameCalculation() {
+  doGeoHashNameCalculation(headerIndex: Headerindex, row: string[]) {
+
+    //找到相应的数据结构，没有的话就新建一个加入到队例里，或者是map里
+    let findPhoneGeoHashName = this.resultPhoneGeoHashNameCount.find(e => {
+      return (e.geohash === row[headerIndex.geohashIndex].trim() && e.phone == row[headerIndex.numberIndex].trim()
+        && e.baseName === row[headerIndex.baseName].trim())
+    });
+
+    if (findPhoneGeoHashName == null) {
+      this.initNewPhoneGeoHashName(row[headerIndex.baseName].trim());
+    }
+    else {
+      findPhoneGeoHashName.baseNameCount += 1;
+    }
 
   }
 
 
   doTheTimeCalculating(headerIndex: Headerindex, row: string[]) {
 
-  //  this.currentCalculate.phone = row[headerIndex.numberIndex].trim();
-  //  this.currentCalculate.geohash = row[headerIndex.geohashIndex].trim();
-  //  this.currentCalculate.inDateTime = row[headerIndex.dateIndex].trim();
+    this.currentCalculate.phone = row[headerIndex.numberIndex].trim();
+    this.currentCalculate.geohash = row[headerIndex.geohashIndex].trim();
+    this.currentCalculate.inDateTime = row[headerIndex.dateIndex].trim();
 
     //去掉双引号
     //this.currentCalculate.phone =
@@ -257,18 +270,9 @@ export class ShowComponent implements OnInit {
       this.rows.forEach(row=> {
         this.doTheTimeCalculating(headerIndex, row);
 
-        //找到相应的数据结构，没有的话就新建一个加入到队例里，或者是map里
-        let findPhoneGeoHashName = this.resultPhoneGeoHashNameCount.find(e => {
-          return (e.geohash === row[headerIndex.geohashIndex].trim() && e.phone == row[headerIndex.numberIndex].trim()
-            && e.baseName === row[headerIndex.baseName].trim())
-        });
+        this.doGeoHashNameCalculation(headerIndex, row);
 
-        if (findPhoneGeoHashName == null) {
-          this.initNewPhoneGeoHashName(row[headerIndex.baseName].trim());
-        }
-        else {
-          findPhoneGeoHashName.baseNameCount += 1;
-        }
+
       });
 
       console.log(this.resultPhonesGeoHashDataTime);
@@ -276,6 +280,7 @@ export class ShowComponent implements OnInit {
       this.service.setResultPhoneGeoHashDataTime(this.resultPhonesGeoHashDataTime);
 
       console.log(this.resultPhoneGeoHashNameCount);
+      
 
       this.router.navigateByUrl("/welcome/result");
 
