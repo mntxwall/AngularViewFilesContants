@@ -161,17 +161,27 @@ export class ShowComponent implements OnInit {
   doGeoHashNameCalculation(headerIndex: Headerindex, row: string[]) {
 
     //找到相应的数据结构，没有的话就新建一个加入到队例里，或者是map里
-    let findPhoneGeoHashName = this.resultPhoneGeoHashNameCount.find(e => {
-      return (e.geohash === row[headerIndex.geohashIndex].trim() && e.phone == row[headerIndex.numberIndex].trim()
-        && e.baseName === row[headerIndex.baseName].trim())
-    });
+    //在基站名称中去掉为空的基站名称
+    //console.log(row[headerIndex.baseName].trim());
 
-    if (findPhoneGeoHashName == null) {
-      this.initNewPhoneGeoHashName(row[headerIndex.baseName].trim());
+    if(row[headerIndex.baseName].trim().length > 0 )
+    {
+      let findPhoneGeoHashName = this.resultPhoneGeoHashNameCount.find(e => {
+        return (
+          e.geohash === row[headerIndex.geohashIndex].trim() &&
+          e.phone == row[headerIndex.numberIndex].trim() &&
+          e.baseName === row[headerIndex.baseName].trim()
+        )
+      });
+
+      if (findPhoneGeoHashName == null) {
+        this.initNewPhoneGeoHashName(row[headerIndex.baseName].trim());
+      }
+      else {
+        findPhoneGeoHashName.baseNameCount += 1;
+      }
     }
-    else {
-      findPhoneGeoHashName.baseNameCount += 1;
-    }
+
 
   }
 
@@ -245,7 +255,7 @@ export class ShowComponent implements OnInit {
       geohash: this.currentCalculate.geohash,
       baseName: baseName,
       baseNameCount: 0
-    }
+    };
 
     this.resultPhoneGeoHashNameCount.push(currentPhoneGeoHashNameCount);
 
@@ -282,25 +292,29 @@ export class ShowComponent implements OnInit {
       this.resultPhonesGeoHashDataTime.forEach(e => {
 
         //if()
-
         let tmp = this.resultPhoneGeoHashNameCount.filter(f =>{
           return (f.geohash === e.geohash && f.phone === e.phone)
         });
+        //没有找到该geohash，大概率这个geohash的中文基站名字为空
+        // 那么就跳过
+        if (tmp.length > 0){
+          tmp.sort((g1, g2) =>{
+            return g1.baseNameCount < g2.baseNameCount ? 1: -1
+          });
 
-        tmp.sort((g1, g2) =>{
-          return g1.baseNameCount < g2.baseNameCount ? 1: -1
-        });
-        e.geoHashName = tmp[0].baseName;
-        e.geoHashNameCount = tmp[0].baseNameCount;
+          e.geoHashName = tmp[0].baseName;
+          e.geoHashNameCount = tmp[0].baseNameCount;
+        }
+
         //console.log(tmp[0])
 
-      })
+      });
 
       this.service.setResultPhoneGeoHashDataTime(this.resultPhonesGeoHashDataTime);
 
-      console.log(this.resultPhoneGeoHashNameCount);
+      //console.log(this.resultPhoneGeoHashNameCount);
 
-      console.log(this.resultPhonesGeoHashDataTime);
+     // console.log(this.resultPhonesGeoHashDataTime);
 
       this.router.navigateByUrl("/welcome/result");
 

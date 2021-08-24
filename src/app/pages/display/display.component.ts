@@ -94,7 +94,7 @@ export class DisplayComponent implements OnInit {
     this.isExporting = false;
  //   window.URL.revokeObjectURL(url);
     a.remove();
-  }
+  };
 
   exportData(): void {
 
@@ -106,7 +106,7 @@ export class DisplayComponent implements OnInit {
     // @ts-ignore
     this.modal.confirm({
       nzTitle: '<i>下载进行中</i>',
-      nzContent: `<b>本次下载文件的名字为：${this.downLoadFileName}.zip</b>`,
+      nzContent: `<b>本次下载文件的名字为：${this.downLoadFileName}.csv</b>`,
 
     });
 
