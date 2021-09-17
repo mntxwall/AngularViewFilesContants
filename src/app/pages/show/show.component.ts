@@ -143,18 +143,21 @@ export class ShowComponent implements OnInit {
 
     let findPhoneGeoHash = this.resultPhonesGeoHashDataTime.find(e => {
       if (type === GET_CURRENT)
-        return (e.phone === this.currentCalculate.phone && e.geohash === this.currentCalculate.geohash)
+        return (e.phone === this.currentCalculate.phone && e.geohash === this.currentCalculate.geohash);
       else
         return (e.phone === this.preCalculate.phone && e.geohash === this.preCalculate.geohash)
     });
     if (findPhoneGeoHash != null){
       findPhoneGeoHash.sumDateTimes +=
-        Math.round(Math.abs((new Date(this.currentCalculate.inDateTime).getTime() - new Date(this.preCalculate.inDateTime).getTime()))/(1000 * 60));
-      let findPhoneGeoHashDateTimeArrays = findPhoneGeoHash.dateTimes[findPhoneGeoHash.dateTimes.length - 1]
+        Math.round(Math.abs((new Date(this.currentCalculate.inDateTime).getTime()
+          - new Date(this.preCalculate.inDateTime).getTime()))
+          /(1000 * 60));
+      let findPhoneGeoHashDateTimeArrays = findPhoneGeoHash.dateTimes[findPhoneGeoHash.dateTimes.length - 1];
       findPhoneGeoHashDateTimeArrays.end = this.currentCalculate.inDateTime;
       findPhoneGeoHashDateTimeArrays.interval =
-        Math.round(Math.abs((new Date(findPhoneGeoHashDateTimeArrays.start).getTime() - new Date(findPhoneGeoHashDateTimeArrays.end).getTime()))/(1000 * 60));
-      //findPhoneGeoHash.sumDateTimes += findPhoneGeoHashDateTimeArrays.interval;
+        Math.round(Math.abs((new Date(findPhoneGeoHashDateTimeArrays.start).getTime()
+          - new Date(findPhoneGeoHashDateTimeArrays.end).getTime()))
+          /(1000 * 60));
     }
   }
 
@@ -191,31 +194,20 @@ export class ShowComponent implements OnInit {
     this.currentCalculate.phone = row[headerIndex.numberIndex].trim();
     this.currentCalculate.geohash = row[headerIndex.geohashIndex].trim();
     this.currentCalculate.inDateTime = row[headerIndex.dateIndex].trim();
-
-    //去掉双引号
-    //this.currentCalculate.phone =
-
-   //console.log(this.currentCalculate.geohash);
-
     //first init
     if(this.preCalculate.phone === "" && this.preCalculate.geohash === ""){
 
       this.preCalculate.phone = row[headerIndex.numberIndex].trim();
       this.preCalculate.geohash = row[headerIndex.geohashIndex].trim();
       this.preCalculate.inDateTime = row[headerIndex.dateIndex].trim();
-
       this.initNewPhoneGeoHashValue();
-
     }
-
     if (this.currentCalculate.phone === this.preCalculate.phone &&
       this.currentCalculate.geohash === this.preCalculate.geohash ){
       //find the array index and caculate the date
       this.calculateCurrentValue(GET_CURRENT)
-
     }
     else if (this.currentCalculate.geohash !== this.preCalculate.geohash){
-
       /*
       * 如果geohash发生了变化 ，那么在结果集中找cur的值，如果没有找到就是新的一条记录，需要init，
       * 找到的话则是新的一段时间的开始，需要把时间参与上一条的计算
@@ -235,13 +227,10 @@ export class ShowComponent implements OnInit {
         findPhoneGeoHash.dateTimes.push(currentDateTime);
 
         //如果发生了切换，把切换的时间当成号码在上一个geohash中的时间
-
         this.calculateCurrentValue(GET_PREVIOS)
 
       }
     }
-
-
     this.preCalculate.inDateTime = this.currentCalculate.inDateTime;
     this.preCalculate.phone = this.currentCalculate.phone;
     this.preCalculate.geohash = this.currentCalculate.geohash;
@@ -287,11 +276,7 @@ export class ShowComponent implements OnInit {
 
       });
 
-
-
       this.resultPhonesGeoHashDataTime.forEach(e => {
-
-        //if()
         let tmp = this.resultPhoneGeoHashNameCount.filter(f =>{
           return (f.geohash === e.geohash && f.phone === e.phone)
         });
