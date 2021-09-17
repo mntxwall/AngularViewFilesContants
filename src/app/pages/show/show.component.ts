@@ -369,8 +369,6 @@ export class ShowComponent implements OnInit {
 
       });
 
-      });
-
       this.service.setResultPhoneGeoHashDataTime(this.resultPhonesGeoHashDataTime);
 
       //console.log(this.resultPhoneGeoHashNameCount);
