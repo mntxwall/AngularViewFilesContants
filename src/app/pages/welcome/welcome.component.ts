@@ -21,15 +21,6 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
 
-    const inventory = [
-      {name: 'apples', quantity: 2},
-      {name: 'bananas', quantity: 0},
-      {name: 'cherries', quantity: 5},
-      {name: 'apples', quantity: 10}
-    ];
-    console.log(inventory.find(e => {
-      return (e.name === 'apples' && e.quantity === 10)
-    }));
   }
 
   beforeUpload = (file: NzUploadFile): boolean => {

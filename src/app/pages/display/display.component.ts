@@ -66,15 +66,26 @@ export class DisplayComponent implements OnInit {
 
     //let exportCsvString = "号码,GEOHASH,停留总时长,开始时间,结束时间,停留区间时长\r\n";
 
-    this.exportCsvString = "号码,GEOHASH,停留总时长,开始时间,结束时间,停留区间时长,GEOHASH中最多次数基站名\r\n";
+    //this.exportCsvString = "号码,GEOHASH,停留总时长,进入时间,离开时间,停留区间时长,GEOHASH中最多次数基站名\r\n";
+
+    this.exportCsvString = "号码,进入时间,离开时间,停留区间时长,GEOHASH中最多次数基站名\r\n";
 
     this.displayPhonesGeoHashDataTime.forEach(row => {
 
+      /*
       row.dateTimes.forEach(dates =>{
         this.exportCsvString += row.phone + "," + row.geohash + "," + row.sumDateTimes + "," +
           dates.end.toString() + "," + dates.start + "," + dates.interval + "," + row.geoHashName +"\r\n";
+      });*/
+
+      row.dateTimes.forEach(dates =>{
+        this.exportCsvString += row.phone + "," +
+          dates.end.toString() + "," + dates.start + "," + dates.interval + "," + row.geoHashName +"\r\n";
       });
+
     });
+
+
 
     const blob = new Blob([ "\uFEFF" + this.exportCsvString], { type: 'text/csv;charset=GBK;' });
 
@@ -94,7 +105,7 @@ export class DisplayComponent implements OnInit {
     this.isExporting = false;
  //   window.URL.revokeObjectURL(url);
     a.remove();
-  }
+  };
 
   exportData(): void {
 
@@ -106,7 +117,7 @@ export class DisplayComponent implements OnInit {
     // @ts-ignore
     this.modal.confirm({
       nzTitle: '<i>下载进行中</i>',
-      nzContent: `<b>本次下载文件的名字为：${this.downLoadFileName}.zip</b>`,
+      nzContent: `<b>本次下载文件的名字为：${this.downLoadFileName}.csv</b>`,
 
     });
 
