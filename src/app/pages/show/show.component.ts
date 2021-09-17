@@ -31,6 +31,9 @@ export class ShowComponent implements OnInit {
   // @ts-ignore
   rows : string[string[]] = [[]];
 
+  // @ts-ignore
+  displayRows: string[string[]] = [[]];
+
 //  viewDates: ViewData[] = [];
 
 //  selectedValue = null;
@@ -48,6 +51,9 @@ export class ShowComponent implements OnInit {
   resultPhonesGeoHashDataTime: PhoneGeoHashDateTimeCounts[] = [];
 
   resultPhoneGeoHashNameCount: PhoneGeoHashNameCount[] = [];
+
+
+  tripPhoneGeoHahsDataTime: PhoneGeoHashDateTimeCounts[] = [];
 
   //preCalculate和currentCalculate用于表示在计算统计时当前的值和上一个处理的值。
   // currentCalculate.geohash和preCalculate.geohash一样时，表示在同一个geohash中
@@ -74,6 +80,9 @@ export class ShowComponent implements OnInit {
     else {
       //console.log(this.tableData);
       this.analyseDataValues();
+
+     this.displayRows = this.rows.slice(0, 5);
+
 
       //console.log(this.rows)
     }
@@ -117,7 +126,7 @@ export class ShowComponent implements OnInit {
 
   }
 
-  initNewPhoneGeoHashValue() {
+  initNewPhoneGeoHashValueReturn() {
 
     let currentPhoneGeoHashDateTime: PhoneGeoHashDateTimeCounts = {
       phone: this.currentCalculate.phone,
@@ -135,6 +144,32 @@ export class ShowComponent implements OnInit {
     }
 
     currentPhoneGeoHashDateTime.dateTimes.push(currentDateTime);
+
+    return currentPhoneGeoHashDateTime;
+  }
+
+  initNewPhoneGeoHashValue() {
+
+    /*
+    let currentPhoneGeoHashDateTime: PhoneGeoHashDateTimeCounts = {
+      phone: this.currentCalculate.phone,
+      geohash: this.currentCalculate.geohash,
+      dateTimes: [],
+      sumDateTimes: 0,
+      geoHashName: "",
+      geoHashNameCount: 0
+    }
+
+    let currentDateTime: StayTime = {
+      start: this.currentCalculate.inDateTime,
+      end: "",
+      interval: 0
+    }
+
+    currentPhoneGeoHashDateTime.dateTimes.push(currentDateTime);
+
+     */
+    let currentPhoneGeoHashDateTime = this.initNewPhoneGeoHashValueReturn();
     this.resultPhonesGeoHashDataTime.push(currentPhoneGeoHashDateTime)
 
   }
@@ -251,6 +286,20 @@ export class ShowComponent implements OnInit {
 
 
   }
+
+  getTripGeohashDataTime(tripGeoHash: PhoneGeoHashDateTimeCounts, tripGeoHashBaseName: PhoneGeoHashNameCount[]) {
+
+    //console.log(tripGeoHashBaseName);
+
+    tripGeoHashBaseName.forEach(e => {
+
+      let copiedgeohash = JSON.parse(JSON.stringify(tripGeoHash));
+      copiedgeohash.baseName = e.baseName;
+      copiedgeohash.geoHashNameCount = e.baseNameCount;
+      this.tripPhoneGeoHahsDataTime.push(copiedgeohash);
+    });
+
+  }
   handleDate() {
 
     this.isCalculate = true;
@@ -283,10 +332,26 @@ export class ShowComponent implements OnInit {
 
         //if()
 
+        //找出基站名称结果集中同样geohash的结果集
         let tmp = this.resultPhoneGeoHashNameCount.filter(f =>{
           return (f.geohash === e.geohash && f.phone === e.phone)
         });
 
+
+
+        let tmpTripBaseName = tmp.filter(f => {
+
+          //console.log(f.baseName.indexOf("机场"))
+          return f.baseName.indexOf("机场")? 0: 1
+        });
+
+        console.log("This is airport")
+        console.log(tmpTripBaseName);
+
+        this.getTripGeohashDataTime(e, tmpTripBaseName)
+
+
+        //找出最大基站名称计数的基站
         tmp.sort((g1, g2) =>{
           return g1.baseNameCount < g2.baseNameCount ? 1: -1
         });
@@ -294,13 +359,16 @@ export class ShowComponent implements OnInit {
         e.geoHashNameCount = tmp[0].baseNameCount;
         //console.log(tmp[0])
 
-      })
+
+      });
 
       this.service.setResultPhoneGeoHashDataTime(this.resultPhonesGeoHashDataTime);
 
       console.log(this.resultPhoneGeoHashNameCount);
 
       console.log(this.resultPhonesGeoHashDataTime);
+
+      console.log(this.tripPhoneGeoHahsDataTime);
 
       this.router.navigateByUrl("/welcome/result");
 
