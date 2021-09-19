@@ -10,7 +10,9 @@ export class BackendService {
   tableData: string = "";
   headers : string[] = [];
 
-  resultPhonesGeoHashDataTime: PhoneGeoHashDateTimeCounts[] = []
+  resultPhonesGeoHashDataTime: PhoneGeoHashDateTimeCounts[] = [];
+
+  tripPhonesGeoHashDataTime: PhoneGeoHashDateTimeCounts[] = [];
 
   constructor() { }
 
@@ -28,6 +30,13 @@ export class BackendService {
 
   getResultPhoneGeoHashDataTime(): Observable<PhoneGeoHashDateTimeCounts[]>{
     return of(this.resultPhonesGeoHashDataTime)
+  }
+
+  setTripPhoneGeoHashDataTime(data: PhoneGeoHashDateTimeCounts[]) {
+    this.tripPhonesGeoHashDataTime = data;
+  }
+  getTripPhoneGeoHashDataTime(): Observable<PhoneGeoHashDateTimeCounts[]>{
+    return of(this.tripPhonesGeoHashDataTime)
   }
 
 
