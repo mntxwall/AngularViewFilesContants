@@ -79,7 +79,7 @@ export class DisplayComponent implements OnInit {
       row.dateTimes.forEach(dates => {
         row.dateTimes.forEach(dates =>{
           this.exportCsvString += "出行" + "," + row.phone + "," +
-            dates.end.toString() + "," + dates.start + "," + dates.interval + "," + row.geoHashName +"\r\n";
+            dates.start.toString() + "," + dates.end.toString() + "," + dates.interval + "," + row.geoHashName +"\r\n";
         });
       })
 

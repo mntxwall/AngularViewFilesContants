@@ -9,6 +9,7 @@ import {
   StayTime,
   ViewData
 } from "../../headerindex";
+import {nl_BE} from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'app-show',
@@ -149,26 +150,6 @@ export class ShowComponent implements OnInit {
   }
 
   initNewPhoneGeoHashValue() {
-
-    /*
-    let currentPhoneGeoHashDateTime: PhoneGeoHashDateTimeCounts = {
-      phone: this.currentCalculate.phone,
-      geohash: this.currentCalculate.geohash,
-      dateTimes: [],
-      sumDateTimes: 0,
-      geoHashName: "",
-      geoHashNameCount: 0
-    }
-
-    let currentDateTime: StayTime = {
-      start: this.currentCalculate.inDateTime,
-      end: "",
-      interval: 0
-    }
-
-    currentPhoneGeoHashDateTime.dateTimes.push(currentDateTime);
-
-     */
     let currentPhoneGeoHashDateTime = this.initNewPhoneGeoHashValueReturn();
     this.resultPhonesGeoHashDataTime.push(currentPhoneGeoHashDateTime)
 
@@ -309,7 +290,13 @@ export class ShowComponent implements OnInit {
       t.phone = row[headerIndex.numberIndex];
       t.geoHashName = row[headerIndex.baseName];
       t.dateTimes[0].start = row[headerIndex.dateIndex];
-      this.tripPhoneGeoHahsDataTime.push(t);
+
+      let tmp = this.tripPhoneGeoHahsDataTime.find(e => {
+        return (e.phone === t.phone && e.geoHashName === t.geoHashName && e.dateTimes[0].start === t.dateTimes[0].start)
+      });
+
+      if (tmp == null)
+        this.tripPhoneGeoHahsDataTime.push(t);
 
     }
 
