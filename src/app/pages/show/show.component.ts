@@ -292,12 +292,12 @@ export class ShowComponent implements OnInit {
 
     tripGeoHashBaseName.forEach(e => {
 
-      let copiedgeohash = JSON.parse(JSON.stringify(tripGeoHash));
-      copiedgeohash.baseName = e.baseName;
+      let copiedgeohash: PhoneGeoHashDateTimeCounts = JSON.parse(JSON.stringify(tripGeoHash));
+      copiedgeohash.geoHashName = e.baseName;
       copiedgeohash.geoHashNameCount = e.baseNameCount;
+      //copiedgeohash.dateTimes.forEach()
       this.tripPhoneGeoHahsDataTime.push(copiedgeohash);
     });
-
   }
   handleDate() {
 
@@ -333,6 +333,38 @@ export class ShowComponent implements OnInit {
         let tmp = this.resultPhoneGeoHashNameCount.filter(f =>{
           return (f.geohash === e.geohash && f.phone === e.phone)
         });
+
+       // if (e.geohash === "wsg1jd"){
+
+          //console.log(tmp);
+
+         // if (e.geoHashName)
+          let tmpTripBaseName1 = tmp.filter(f => {
+
+            //console.log(f.baseName.indexOf("机场"))
+           // if ()
+            return f.baseName.toString().includes("机场") ? 1: 0
+          });
+
+          //console.log(tmpTripBaseName1);
+          if (tmpTripBaseName1.length > 0) {
+            this.getTripGeohashDataTime(e, tmpTripBaseName1);
+          }
+       // }
+
+        /*
+        let tmpTripBaseName1 = tmp.filter(f => {
+
+          //console.log(f.baseName.indexOf("机场"))
+          return f.baseName.indexOf("机场")? 0: 1
+        });
+
+         console.log("This is airport");
+         console.log(tmpTripBaseName1);
+
+
+         */
+
         //没有找到该geohash，大概率这个geohash的中文基站名字为空
         // 那么就跳过
         if (tmp.length > 0){
@@ -344,21 +376,26 @@ export class ShowComponent implements OnInit {
           e.geoHashNameCount = tmp[0].baseNameCount;
         }
 
-
-
-
+/*
         let tmpTripBaseName = tmp.filter(f => {
 
           //console.log(f.baseName.indexOf("机场"))
           return f.baseName.indexOf("机场")? 0: 1
         });
 
-        console.log("This is airport")
-        console.log(tmpTripBaseName);
+        // console.log("This is airport");
+        // console.log(tmpTripBaseName);
 
-        this.getTripGeohashDataTime(e, tmpTripBaseName)
+        if (tmpTripBaseName.length > 0) {
+          this.getTripGeohashDataTime(e, tmpTripBaseName);
+        }
+
+ */
 
 
+
+
+/*
         //找出最大基站名称计数的基站
         tmp.sort((g1, g2) =>{
           return g1.baseNameCount < g2.baseNameCount ? 1: -1
@@ -366,16 +403,19 @@ export class ShowComponent implements OnInit {
         e.geoHashName = tmp[0].baseName;
         e.geoHashNameCount = tmp[0].baseNameCount;
         //console.log(tmp[0])
+        */
 
       });
 
       this.service.setResultPhoneGeoHashDataTime(this.resultPhonesGeoHashDataTime);
 
+      this.service.setTripPhoneGeoHashDataTime(this.tripPhoneGeoHahsDataTime);
+
       //console.log(this.resultPhoneGeoHashNameCount);
 
      // console.log(this.resultPhonesGeoHashDataTime);
 
-      console.log(this.tripPhoneGeoHahsDataTime);
+      //console.log(this.tripPhoneGeoHahsDataTime);
 
       this.router.navigateByUrl("/welcome/result");
 

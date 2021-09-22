@@ -12,11 +12,16 @@ import {NzModalService} from "ng-zorro-antd/modal";
 export class DisplayComponent implements OnInit {
 
   displayPhonesGeoHashDataTime: PhoneGeoHashDateTimeCounts[] = [];
+
+  tripGeoHashDataTime : PhoneGeoHashDateTimeCounts[] = [];
+
   expandSet = new Set<string>();
 
   downLoadFileName: string = "";
 
   exportCsvString: string = "";
+  //exportCsvStringTrip: string = "";
+
   isExporting = false;
 
   //expandGeoHashDateTimes: StayTime[] | undefined = [];
@@ -35,6 +40,16 @@ export class DisplayComponent implements OnInit {
      this.displayPhonesGeoHashDataTime.forEach(t =>{
        t.dateTimes.sort((a, b) => (a.interval > b.interval) ? -1 : 1)
      });
+
+     this.service.getTripPhoneGeoHashDataTime().subscribe(data => {
+
+       this.tripGeoHashDataTime = data;
+     });
+
+     /*
+     this.displayPhonesGeoHashDataTime =  this.displayPhonesGeoHashDataTime.filter(f => {
+       return f.sumDateTimes > 0
+     });*/
 
    });
 
@@ -68,7 +83,15 @@ export class DisplayComponent implements OnInit {
 
     //this.exportCsvString = "号码,GEOHASH,停留总时长,进入时间,离开时间,停留区间时长,GEOHASH中最多次数基站名\r\n";
 
-    this.exportCsvString = "号码,进入时间,离开时间,停留区间时长,GEOHASH中最多次数基站名\r\n";
+    this.exportCsvString = "类型,号码,进入时间,离开时间,停留区间时长,GEOHASH中最多次数基站名\r\n";
+
+    this.tripGeoHashDataTime.forEach(row => {
+
+      row.dateTimes.forEach(dates =>{
+        this.exportCsvString += "出行"+ "," + row.phone + "," +
+          dates.end.toString() + "," + dates.start + "," + dates.interval + "," + row.geoHashName +"\r\n";
+      });
+    });
 
     this.displayPhonesGeoHashDataTime.forEach(row => {
 
@@ -79,7 +102,7 @@ export class DisplayComponent implements OnInit {
       });*/
 
       row.dateTimes.forEach(dates =>{
-        this.exportCsvString += row.phone + "," +
+        this.exportCsvString += "普通"+ "," + row.phone + "," +
           dates.end.toString() + "," + dates.start + "," + dates.interval + "," + row.geoHashName +"\r\n";
       });
 
