@@ -20,8 +20,6 @@ export class DisplayComponent implements OnInit {
   downLoadFileName: string = "";
 
   exportCsvString: string = "";
-  //exportCsvStringTrip: string = "";
-
   isExporting = false;
 
   //expandGeoHashDateTimes: StayTime[] | undefined = [];

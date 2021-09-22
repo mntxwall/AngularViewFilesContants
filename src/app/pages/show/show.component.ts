@@ -292,13 +292,35 @@ export class ShowComponent implements OnInit {
 
     tripGeoHashBaseName.forEach(e => {
 
-      let copiedgeohash: PhoneGeoHashDateTimeCounts = JSON.parse(JSON.stringify(tripGeoHash));
-      copiedgeohash.geoHashName = e.baseName;
+      let copiedgeohash = JSON.parse(JSON.stringify(tripGeoHash));
+      copiedgeohash.baseName = e.baseName;
       copiedgeohash.geoHashNameCount = e.baseNameCount;
-      //copiedgeohash.dateTimes.forEach()
       this.tripPhoneGeoHahsDataTime.push(copiedgeohash);
     });
   }
+
+  getTripGeoHahsDataTime2(headerIndex: Headerindex, row: string[]) {
+
+    if (row[headerIndex.baseName].includes("机场") || row[headerIndex.baseName].includes("高铁") ||
+      row[headerIndex.baseName].includes("动车")) {
+
+      let t = this.initNewPhoneGeoHashValueReturn();
+      t.geohash = row[headerIndex.geohashIndex];
+      t.phone = row[headerIndex.numberIndex];
+      t.geoHashName = row[headerIndex.baseName];
+      t.dateTimes[0].start = row[headerIndex.dateIndex];
+
+      let tmp = this.tripPhoneGeoHahsDataTime.find(e => {
+        return (e.phone === t.phone && e.geoHashName === t.geoHashName && e.dateTimes[0].start === t.dateTimes[0].start)
+      });
+
+      if (tmp == null)
+        this.tripPhoneGeoHahsDataTime.push(t);
+
+    }
+
+  }
+
   handleDate() {
 
     this.isCalculate = true;
@@ -318,6 +340,9 @@ export class ShowComponent implements OnInit {
       // @ts-ignore
       //用一个循环解决问题
       this.rows.forEach(row=> {
+
+        this.getTripGeoHahsDataTime2(headerIndex, row);
+
         this.doTheTimeCalculating(headerIndex, row);
 
         this.doGeoHashNameCalculation(headerIndex, row);
@@ -334,37 +359,6 @@ export class ShowComponent implements OnInit {
           return (f.geohash === e.geohash && f.phone === e.phone)
         });
 
-       // if (e.geohash === "wsg1jd"){
-
-          //console.log(tmp);
-
-         // if (e.geoHashName)
-          let tmpTripBaseName1 = tmp.filter(f => {
-
-            //console.log(f.baseName.indexOf("机场"))
-           // if ()
-            return f.baseName.toString().includes("机场") ? 1: 0
-          });
-
-          //console.log(tmpTripBaseName1);
-          if (tmpTripBaseName1.length > 0) {
-            this.getTripGeohashDataTime(e, tmpTripBaseName1);
-          }
-       // }
-
-        /*
-        let tmpTripBaseName1 = tmp.filter(f => {
-
-          //console.log(f.baseName.indexOf("机场"))
-          return f.baseName.indexOf("机场")? 0: 1
-        });
-
-         console.log("This is airport");
-         console.log(tmpTripBaseName1);
-
-
-         */
-
         //没有找到该geohash，大概率这个geohash的中文基站名字为空
         // 那么就跳过
         if (tmp.length > 0){
@@ -376,26 +370,21 @@ export class ShowComponent implements OnInit {
           e.geoHashNameCount = tmp[0].baseNameCount;
         }
 
-/*
+
+
+
         let tmpTripBaseName = tmp.filter(f => {
 
           //console.log(f.baseName.indexOf("机场"))
           return f.baseName.indexOf("机场")? 0: 1
         });
 
-        // console.log("This is airport");
-        // console.log(tmpTripBaseName);
+        console.log("This is airport")
+        console.log(tmpTripBaseName);
 
-        if (tmpTripBaseName.length > 0) {
-          this.getTripGeohashDataTime(e, tmpTripBaseName);
-        }
-
- */
+        this.getTripGeohashDataTime(e, tmpTripBaseName)
 
 
-
-
-/*
         //找出最大基站名称计数的基站
         tmp.sort((g1, g2) =>{
           return g1.baseNameCount < g2.baseNameCount ? 1: -1
@@ -403,19 +392,17 @@ export class ShowComponent implements OnInit {
         e.geoHashName = tmp[0].baseName;
         e.geoHashNameCount = tmp[0].baseNameCount;
         //console.log(tmp[0])
-        */
 
       });
 
       this.service.setResultPhoneGeoHashDataTime(this.resultPhonesGeoHashDataTime);
-
       this.service.setTripPhoneGeoHashDataTime(this.tripPhoneGeoHahsDataTime);
 
       //console.log(this.resultPhoneGeoHashNameCount);
 
      // console.log(this.resultPhonesGeoHashDataTime);
 
-      //console.log(this.tripPhoneGeoHahsDataTime);
+      console.log(this.tripPhoneGeoHahsDataTime);
 
       this.router.navigateByUrl("/welcome/result");
 
