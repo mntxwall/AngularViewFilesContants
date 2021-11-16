@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable, of} from "rxjs";
-import {PhoneGeoHashDateTimeCounts, ViewData} from "./headerindex";
+import {Headerindex, PhoneGeoHashDateTimeCounts, ViewData} from "./headerindex";
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +38,12 @@ export class BackendService {
 
   getTripPhoneGeoHashDataTime(): Observable<PhoneGeoHashDateTimeCounts[]>{
     return of(this.tripPhoneGeoHashDataTime)
+  }
+
+  // @ts-ignore
+  setRelationDate(rows: string[string[]], headerindex: Headerindex){
+    console.log(rows)
+    console.log(headerindex)
   }
 
 

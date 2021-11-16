@@ -27,8 +27,6 @@ export class WelcomeComponent implements OnInit {
     this.fileList = this.fileList.concat(file);
     return false;
   };
-
-
   handleUpload():void {
     this.isLoading = true;
 

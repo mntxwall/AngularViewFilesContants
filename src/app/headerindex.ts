@@ -3,6 +3,12 @@ export interface Headerindex {
   dateIndex: number;
   geohashIndex: number;
   baseName: number;
+  peerIndex: number;
+}
+
+export interface RowData{
+  usernum: string;
+  peernum: string;
 }
 
 export interface ViewData {
